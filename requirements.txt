@@ -1,0 +1,11 @@
+pytest
+pytest-html
+selenium
+requests
+pyyaml
+jsonpath
+packaging==24.0
+seleniumbase==4.38.0
+langchain-core==0.3.49
+browser-use==0.1.48
+pydantic==2.10.4
