@@ -138,6 +138,25 @@ class CustomBase(BaseCase):
         self.assert_element("h2.el-notification__title:contains('Password changed Successfully.')", timeout=10)
         self.assert_element("div.el-notification__content:contains('Password has been changed.')", timeout=10)
 
+    def admin_recovery_password_dkyuan_all_cbo(self):
+        
+        target_menu_selector = "//tr[.//td[contains(., 'dkyuan_all')]]//div[contains(@class, 'el-dropdown')]"
+        self.click(target_menu_selector)
+
+        self.click("li.el-dropdown-menu__item:contains('Update Password')")
+
+        self.assert_element("span.el-drawer__title:contains('Update Password')", timeout=10)
+
+        self.type("input[placeholder='Enter your password again']", TestConfig.CBO_PASSWORD)
+
+        self.type("input[placeholder='Enter your new password']", TestConfig.CBO_PASSWORD)
+
+        self.assert_element_not_present("button.submit:disabled", timeout=10)
+        self.assert_element("button.submit", timeout=10)
+        self.click("button.submit")
+
+        self.assert_element("h2.el-notification__title:contains('Password changed Successfully.')", timeout=10)
+        self.assert_element("div.el-notification__content:contains('Password has been changed.')", timeout=10)
 ################################################################################################################
 
     def login_page_check_kbb(self):

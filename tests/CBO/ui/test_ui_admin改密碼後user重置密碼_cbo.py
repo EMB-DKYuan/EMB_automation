@@ -26,6 +26,8 @@ class TestUIadmin改密碼後user重置密碼CBO(CustomBase):
         self.click_menu_accountmanagement_accountlist_cbo()
 
         self.admin_reset_password_dkyuan_all_cbo()
+
+        self.admin_recovery_password_dkyuan_all_cbo()
         
         # =====執行登出操作 =====
         
