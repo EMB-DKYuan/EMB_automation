@@ -1,5 +1,6 @@
 from seleniumbase import BaseCase
 from config import TestConfig
+from selenium.webdriver.common.keys import Keys
 
 class CustomBase(BaseCase):
     
@@ -112,23 +113,23 @@ class CustomBase(BaseCase):
         target_menu_selector = "//tr[.//td[contains(., 'dkyuan_all')]]//div[contains(@class, 'el-dropdown')]"
         self.click(target_menu_selector)
 
-        self.assert_element("li.el-dropdown-menu__item:contains('Update Password')", timeout=10)
         self.click("li.el-dropdown-menu__item:contains('Update Password')")
 
         self.assert_element("span.el-drawer__title:contains('Update Password')", timeout=10)
 
-        self.assert_element("input[placeholder='Enter your new password']", timeout=10)
         self.type("input[placeholder='Enter your new password']", TestConfig.CBO_PASSWORD_2)
 
-        self.assert_element("input[placeholder='Enter your new password again']", timeout=10)
-        self.type("input[placeholder='Enter your new password again']", TestConfig.CBO_PASSWORD_2)
+        self.execute_script("""document.querySelectorAll('.el-popper.is-custom_tooltip.el-tooltip, .el-overlay, .el-drawer__mask, .v-modal').forEach(e => e.style.display='none');""")
+
+        self.type("input[placeholder='Enter your password again']", TestConfig.CBO_PASSWORD_2)
 
         self.assert_element_not_present("button.submit:disabled", timeout=10)
         self.assert_element("button.submit", timeout=10)
         self.click("button.submit")
 
         self.click("div.el-overlay")
-        self.assert_element("h2.el-notification__title:contains('Password updated successfully.Password has been reset.')", timeout=10)
+        self.assert_element("h2.el-notification__title:contains('Password changed Successfully.')", timeout=10)
+        self.assert_element("div.el-notification__content:contains('Password has been changed.')", timeout=10)
 
 ################################################################################################################
 
