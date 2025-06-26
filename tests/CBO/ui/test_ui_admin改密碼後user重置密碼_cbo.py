@@ -2,13 +2,16 @@ import os
 from config import TestConfig
 from libs.ui_custom_base import CustomBase
 
-class TestUI登入登出CBO(CustomBase):
+class TestUIadmin改密碼後user重置密碼CBO(CustomBase):
     
-    def test_ui_login_logout(self):
+    def test_ui_admin_changepassword_user_resetpassword(self):
         
-
-        # 使用 KBB UI 網域
+        # =====設定瀏覽器視窗大小 =====
+        self.specific_window_size_max()
+        
+        # =====使用 KBB UI 網域 =====
         login_url = TestConfig.build_ui_url("login", "CBO")
+       
         # =====開啟登入頁面並驗證頁面載入 =====
         self.open(login_url)
         

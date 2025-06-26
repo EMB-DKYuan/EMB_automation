@@ -3,6 +3,16 @@ from config import TestConfig
 from selenium.webdriver.common.keys import Keys
 
 class CustomBase(BaseCase):
+
+    def specific_window_size_max(self):
+        self.maximize_window()
+    
+    def specific_window_size(self, width=1920, height=1080):
+        """
+        設定瀏覽器視窗大小為指定的寬度和高度。
+        預設值為 1920x1080。
+        """
+        self.set_window_size(width, height)
     
     def login_page_check_cbo(self):
 
@@ -117,17 +127,14 @@ class CustomBase(BaseCase):
 
         self.assert_element("span.el-drawer__title:contains('Update Password')", timeout=10)
 
-        self.type("input[placeholder='Enter your new password']", TestConfig.CBO_PASSWORD_2)
-
-        self.execute_script("""document.querySelectorAll('.el-popper.is-custom_tooltip.el-tooltip, .el-overlay, .el-drawer__mask, .v-modal').forEach(e => e.style.display='none');""")
-
         self.type("input[placeholder='Enter your password again']", TestConfig.CBO_PASSWORD_2)
+
+        self.type("input[placeholder='Enter your new password']", TestConfig.CBO_PASSWORD_2)
 
         self.assert_element_not_present("button.submit:disabled", timeout=10)
         self.assert_element("button.submit", timeout=10)
         self.click("button.submit")
 
-        self.click("div.el-overlay")
         self.assert_element("h2.el-notification__title:contains('Password changed Successfully.')", timeout=10)
         self.assert_element("div.el-notification__content:contains('Password has been changed.')", timeout=10)
 
@@ -227,3 +234,7 @@ class CustomBase(BaseCase):
         
         # 點擊遮罩層關閉錯誤提示通知
         self.click("div.el-overlay")
+
+    def cancel_mask(self):
+
+        self.execute_script("""document.querySelectorAll('.el-popper.is-custom_tooltip.el-tooltip, .el-overlay, .el-drawer__mask, .v-modal').forEach(e => e.style.display='none');""")

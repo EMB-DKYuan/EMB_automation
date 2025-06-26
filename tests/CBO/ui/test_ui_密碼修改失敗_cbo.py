@@ -6,6 +6,9 @@ class TestUI密碼修改失敗CBO(CustomBase):
     
     def test_ui_changepassword_duplicated(self):
 
+        # =====設定瀏覽器視窗大小 =====
+        self.specific_window_size_max()
+
          # 使用 CBO UI 網域
         login_url = TestConfig.build_ui_url("login", "CBO")
         self.open(login_url)
