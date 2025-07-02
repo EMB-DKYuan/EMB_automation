@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "EMB_automation Docs": {
+      "type": "sse",
+      "url": "https://gitmcp.io/EMB-DKYuan/EMB_automation"
+    }
+  }
+}

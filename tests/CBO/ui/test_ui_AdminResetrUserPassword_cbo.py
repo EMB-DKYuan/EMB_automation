@@ -7,7 +7,7 @@ class TestUIadmin改密碼後user重置密碼CBO(CustomBase):
     def test_ui_admin_changepassword_user_resetpassword(self):
         
         # =====設定瀏覽器視窗大小 =====
-        self.specific_window_size_max()
+        self.specific_window_size()
         
         # =====使用 KBB UI 網域 =====
         login_url = TestConfig.build_ui_url("login", "CBO")

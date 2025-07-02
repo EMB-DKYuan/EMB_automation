@@ -7,7 +7,7 @@ class TestUI密碼修改失敗CBO(CustomBase):
     def test_ui_wrongid_wrongpassword(self):
 
         # =====設定瀏覽器視窗大小 =====
-        self.specific_window_size_max()
+        self.specific_window_size()
 
          # 使用 KBB UI 網域
         login_url = TestConfig.build_ui_url("login", "CBO")

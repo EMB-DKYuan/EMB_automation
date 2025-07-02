@@ -20,6 +20,45 @@ class CustomBase(BaseCase):
         """
         self.set_window_size(width, height)
     
+    def set_page_zoom(self, level=100):
+        """
+        設定瀏覽器頁面的縮放層級。
+        :param level: 縮放百分比 (例如: 75 就是 75%)
+        """
+        zoom_level = level / 100.0
+        self.execute_script(f"document.body.style.zoom = '{zoom_level}'")
+        print(f"頁面縮放已設定為: {level}%")
+
+    def reset_page_zoom(self):
+        """ 將頁面縮放恢復為 100% """
+        self.set_page_zoom(100)
+    
+    def set_browser_zoom(self, level=100):
+        """
+        透過模擬鍵盤操作來設定瀏覽器本身的縮放層級。
+        這比修改 CSS 的 'zoom' 屬性更可靠。
+        :param level: 目標縮放百分比 (例如: 75, 90, 110)
+        """
+        # 判斷作業系統，選擇對應的控制鍵 (Ctrl 或 Command)
+        control_key = Keys.COMMAND if sys.platform == 'darwin' else Keys.CONTROL
+
+        # 2. 先重設縮放為 100%，以建立一個基準點
+        self.driver.find_element("tag name", "html").send_keys(control_key, "0")
+
+        # 3. 根據目標層級，決定是放大還是縮小
+        if level < 100:
+            # 假設每次縮小 10%，計算需要按幾次
+            steps = int((100 - level) / 10)
+            for _ in range(steps):
+                self.driver.find_element("tag name", "html").send_keys(control_key, Keys.SUBTRACT) # Keys.SUBTRACT 是小鍵盤的 '-'
+        elif level > 100:
+            # 假設每次放大 10%，計算需要按幾次
+            steps = int((level - 100) / 10)
+            for _ in range(steps):
+                self.driver.find_element("tag name", "html").send_keys(control_key, Keys.ADD) # Keys.ADD 是小鍵盤的 '+'
+        
+        print(f"瀏覽器縮放已嘗試設定至約: {level}%")
+
     def __init__(self, *args, **kwargs):
         # 這是關鍵第一步：在測試物件初始化時，就建立一個代表本次執行的時間戳
         super().__init__(*args, **kwargs)
