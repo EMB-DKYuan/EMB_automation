@@ -1,6 +1,12 @@
 from seleniumbase import BaseCase
 from config import TestConfig
 from selenium.webdriver.common.keys import Keys
+from datetime import datetime
+from dotenv import load_dotenv
+import os
+import sys
+import re
+import inspect
 
 class CustomBase(BaseCase):
 
@@ -14,6 +20,46 @@ class CustomBase(BaseCase):
         """
         self.set_window_size(width, height)
     
+    def __init__(self, *args, **kwargs):
+        # 這是關鍵第一步：在測試物件初始化時，就建立一個代表本次執行的時間戳
+        super().__init__(*args, **kwargs)
+        self.run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    def save_screenshot_with_full_path(self, task_name=None):
+        # 取得專案根目錄
+        project_root = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
+
+        # 取得測試模式
+        env_path = os.path.join(project_root, '.env')
+        load_dotenv(dotenv_path=env_path)
+        test_mode = os.getenv("TEST_MODE", "default")
+
+        # 取得呼叫此函式的腳本名稱
+        caller_frame = inspect.stack()[1]
+        script_path = caller_frame.filename
+        script_name = os.path.splitext(os.path.basename(script_path))[0]
+        script_name = re.sub(r'[^A-Za-z0-9_\-]', '_', script_name)
+
+        # 這是關鍵第二步：使用 self.run_timestamp 來建立唯一的執行資料夾
+        # 路徑結構變為： reports / 執行時間戳 / 測試模式 / 腳本名稱
+        full_folder_path = os.path.join(
+            project_root, "reports", self.run_timestamp, test_mode, script_name
+        )
+        os.makedirs(full_folder_path, exist_ok=True)
+
+        # 這是關鍵第三步：為每張圖片建立一個包含毫秒的唯一檔名，防止覆蓋
+        file_time_str = datetime.now().strftime("%H%M%S_%f")[:-3]  # 精確到毫秒
+        if task_name:
+            task_name = re.sub(r'[^A-Za-z0-9_\-]', '_', task_name)
+            screenshot_name = f"{file_time_str}_{task_name}.png"
+        else:
+            screenshot_name = f"{file_time_str}_screenshot.png"
+
+        # 組合完整路徑並存檔
+        full_path = os.path.join(full_folder_path, screenshot_name)
+        self.save_screenshot(full_path)
+        print(f"截圖已儲存至: {full_path}")
+
     def login_page_check_cbo(self):
 
         # 驗證登入按鈕是否存在，確保頁面已正確載入
@@ -110,13 +156,62 @@ class CustomBase(BaseCase):
         # el-overlay 是 Element UI 的遮罩層元素
         self.click("div.el-overlay")
 
+################################################################################################################
+    def click_menu_accountmanagement_cbo(self):
+        # 點擊左側菜單中的 "Account Management" 選項
+        self.click("span:contains('Account Management')")
+    
+    def click_menu_accountmanagement_accountregistration_cbo(self):
+        # 點擊左側菜單中的 "Account Management" 選項
+        self.click("span:contains('Account Registration')")
+
     def click_menu_accountmanagement_accountlist_cbo(self):
         # 點擊左側菜單中的 "Account Management" 選項
-        self.assert_element("span:contains('Account Management')", timeout=10)
-        self.click("span:contains('Account Management')")
-
-        self.assert_element("span:contains('Account List')", timeout=10)
         self.click("span:contains('Account List')")
+
+    def accountlist_search_button_cbo(self):
+
+        self.click("span:contains('Search')")
+
+    def click_accountlist_platform_cbo(self):
+
+        self.click("div.el-select__selected-item.el-select__placeholder")
+    
+    def click_accountlist_platform_all_cbo(self):
+
+        self.click("li.el-select-dropdown__item:contains('All')")
+        
+    def click_accountlist_platform_bethub_cbo(self):
+
+        self.click("li.el-select-dropdown__item:contains('BETHUB')")
+
+    def click_accountlist_platform_bethub2_cbo(self):
+
+        self.click("li.el-select-dropdown__item:contains('BETHUB2')")
+
+    def click_accountlist_platform_playpal_cbo(self):
+
+        self.click("li.el-select-dropdown__item:contains('PLAYPAL')")
+
+    def click_accountlist_platform_pin77_cbo(self):
+
+        self.click("li.el-select-dropdown__item:contains('Pin77')")
+################################################################################################################
+    def click_menu_outletlist_cbo(self):
+        # 點擊左側菜單中的 "Account Management" 選項
+        self.click("span:contains('Outlet List')")
+
+    def click_menu_playerlist_cbo(self):
+        # 點擊左側菜單中的 "Account Management" 選項
+        self.click("span:contains('Player List')")
+
+    def click_menu_gamelist_cbo(self):
+        # 點擊左側菜單中的 "Account Management" 選項
+        self.click("span:contains('Game List')")
+    
+    def click_menu_report_cbo(self):
+        # 點擊左側菜單中的 "Account Management" 選項
+        self.click("span:contains('Report')")
 
     def admin_reset_password_dkyuan_all_cbo(self):
         

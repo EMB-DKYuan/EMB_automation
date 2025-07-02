@@ -27,6 +27,8 @@ class TestUI密碼修改失敗CBO(CustomBase):
         # ===== 第四階段：輸入重複密碼並提交 =====
         
         self.type_duplicated_password_cbo()
+
+        self.save_screenshot_with_full_path()
         
         # ===== 第六階段：登出並驗證返回登入頁面 =====
         

@@ -1,16 +1,17 @@
 # 測試配置
 test_paths:
   unit_tests:
-    - tests/CBO/ui/test_ui_admin改密碼後user重置密碼_cbo.py
+    - tests/CBO/ui/test_ui_AllPageCheck_cbo.py
 
   ui_tests:
     - tests/CBO_KBB/ui/test_ui_密碼修改失敗_kbb.py
     - tests/CBO_KBB/ui/test_ui_登入登出_kbb.py
     - tests/CBO_KBB/ui/test_ui_密碼登入錯誤_kbb.py
-    - tests/CBO/ui/test_ui_密碼修改失敗_cbo.py
-    - tests/CBO/ui/test_ui_登入登出_cbo.py
-    - tests/CBO/ui/test_ui_密碼登入錯誤_cbo.py
-    - tests/CBO/ui/test_ui_admin改密碼後user重置密碼_cbo.py
+    - tests/CBO/ui/test_ui_PasswordChangFail_cbo.py
+    - tests/CBO/ui/test_ui_Login&out_cbo.py
+    - tests/CBO/ui/test_ui_WrongPasswordLogin_cbo.py
+    - tests/CBO/ui/test_ui_AdminResetrUserPassword_cbo.py
+    - tests/CBO/ui/test_ui_AllPageCheck_cbo.py
   
   api_tests:
     - tests/CBO_KBB/api/test_api_登入登出_kbb.py
@@ -28,10 +29,11 @@ test_paths:
   cbo_tests:
     - tests/CBO/api/test_api_登入登出_cbo.py
     - tests/CBO/api/test_api_修改密碼失敗_cbo.py
-    - tests/CBO/ui/test_ui_密碼修改失敗_cbo.py
-    - tests/CBO/ui/test_ui_登入登出_cbo.py
-    - tests/CBO/ui/test_ui_密碼登入錯誤_cbo.py
-    - tests/CBO/ui/test_ui_admin改密碼後user重置密碼_cbo.py
+    - tests/CBO/ui/test_ui_PasswordChangFail_cbo.py
+    - tests/CBO/ui/test_ui_Login&out_cbo.py
+    - tests/CBO/ui/test_ui_WrongPasswordLogin_cbo.py
+    - tests/CBO/ui/test_ui_AdminResetrUserPassword_cbo.py
+    - tests/CBO/ui/test_ui_AllPageCheck_cbo.py
 
 # 執行模式
 mode: all, unit, ui, api, kbb, cbo # all, ui, api, smoke, custom

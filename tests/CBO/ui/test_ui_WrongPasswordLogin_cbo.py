@@ -19,6 +19,10 @@ class TestUI密碼修改失敗CBO(CustomBase):
         
         self.type_wrong_user_id_cbo()
 
+        self.save_screenshot_with_full_path()
+
         self.type_wrong_password_cbo()
+
+        self.save_screenshot_with_full_path()
 
         print(f"使用的 URL: {login_url}")

@@ -16,12 +16,18 @@ class TestUI登入登出CBO(CustomBase):
         
         self.login_page_check_cbo()
 
+        self.save_screenshot_with_full_path()
+
         # ===== 第二階段：輸入使用者憑證並執行登入 =====
         
         self.login_cbo()
+
+        self.save_screenshot_with_full_path()
         
         # ===== 第四階段：執行登出操作 =====
         
         self.logout_cbo()
+
+        self.save_screenshot_with_full_path()
 
         print(f"使用的 URL: {login_url}")
