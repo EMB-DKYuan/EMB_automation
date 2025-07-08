@@ -14,19 +14,19 @@ class TestUI登入登出CBO(CustomBase):
         # ===== 第一階段：開啟登入頁面並驗證頁面載入 =====
         self.open(login_url)
         
-        self.login_page_check_cbo()
+        self.login_page_check("CBO")
 
         self.save_screenshot_with_full_path()
 
         # ===== 第二階段：輸入使用者憑證並執行登入 =====
         
-        self.login_cbo()
+        self.login("CBO")
 
         self.save_screenshot_with_full_path()
         
         # ===== 第四階段：執行登出操作 =====
         
-        self.logout_cbo()
+        self.logout("CBO")
 
         self.save_screenshot_with_full_path()
 

@@ -13,11 +13,11 @@ class TestUI全頁面點擊CBO(CustomBase):
         login_url = TestConfig.build_ui_url("login", "CBO")
         self.open(login_url)
         
-        self.login_page_check_cbo()
+        self.login_page_check("CBO")
 
         # ===== 第二階段：執行使用者登入流程 =====
         
-        self.login_cbo()
+        self.login("CBO")
 
         self.click_menu_accountmanagement_cbo()
 
@@ -73,6 +73,6 @@ class TestUI全頁面點擊CBO(CustomBase):
 
         self.click_menu_report_cbo()
 
-        self.logout_cbo()
+        self.logout("CBO")
 
         print(f"使用的 URL: {login_url}")

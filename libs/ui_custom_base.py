@@ -99,49 +99,85 @@ class CustomBase(BaseCase):
         self.save_screenshot(full_path)
         print(f"截圖已儲存至: {full_path}")
 
-    def login_page_check_cbo(self):
+################################################################################################################
 
-        # 驗證登入按鈕是否存在，確保頁面已正確載入
-        self.assert_element("button:contains('Login')", timeout=10)
-        
-        # 驗證頁面LOGO元素是否存在
-        self.assert_element("img.logo[src='https://mg-web.bhcbo.uat/e3c47/images/login/logo.png']", timeout=10)
+    def _get_platform_config(self, platform):
+        """獲取指定平台的 UI 元素和預設帳密配置"""
+        platform = platform.upper()
+        # 定義所有平台的配置信息
+        platform_configs = {
+            "CBO": {
+                "user_id": TestConfig.CBO_USER_ID,
+                "password": TestConfig.CBO_PASSWORD,
+                "admin_user_id": TestConfig.CBO_ADMIN_USER_ID,
+                "admin_password": TestConfig.CBO_ADMIN_PASSWORD,
+                "user_id_placeholder": "Enter your User ID",
+                "password_placeholder": "Enter your Password",
+                "logo_selector": f"img.logo[src='{TestConfig.CBO_LOGO_URL()}']",
+                "logout_selector": f"img.icon[src='{TestConfig.CBO_LOGOUT_ICON_URL()}']",
+            },
+            "KBB": {
+                "user_id": TestConfig.KBB_USER_ID,
+                "password": TestConfig.KBB_PASSWORD,
+                "user_id_placeholder": "Enter your User ID",
+                "password_placeholder": "Enter your Password",
+                "logo_selector": "div.subtitle:contains('Centralized Back Office')",
+                "logout_selector": "button:contains('Logout')",
+            },
+            "CCCOMPANY": {
+                "user_id": TestConfig.CCCOMPANY_ADMIN_USER_ID, # 只有 admin
+                "password": TestConfig.CCCOMPANY_ADMIN_PASSWORD,
+                "user_id_placeholder": "Input your account",
+                "password_placeholder": "Enter your password",
+                "logo_selector": f"img.logo[src='{TestConfig.CC_LOGO_URL()}']",
+                "logout_selector": f"img.icon[src='{TestConfig.CC_LOGOUT_ICON_URL()}']",
+            },
+            "CCAGENT": {
+                "user_id": TestConfig.CCAGENT_ADMIN_USER_ID, # 只有 admin
+                "password": TestConfig.CCAGENT_ADMIN_PASSWORD,
+                "user_id_placeholder": "Input your account",
+                "password_placeholder": "Enter your password",
+                "logo_selector": f"img.logo[src='{TestConfig.CC_LOGO_URL()}']", # 假設與 CCCOMPANY 共用
+                "logout_selector": f"img.icon[src='{TestConfig.CC_LOGOUT_ICON_URL()}']", # 假設與 CCCOMPANY 共用
+            }
+        }
+        config = platform_configs.get(platform)
+        if not config:
+            raise ValueError(f"未知的平台配置: '{platform}'")
+        return config
     
-    def login_cbo(self, user_id=TestConfig.CBO_USER_ID, password=TestConfig.CBO_PASSWORD):
+    def login(self, platform, user_id=None, password=None, is_admin=False):
+        """通用的登入方法"""
+        config = self._get_platform_config(platform)
 
-        # 在使用者 ID 輸入框中輸入帳號
-        self.type("input[placeholder='Enter your User ID']", user_id)
-        
-        # 在密碼輸入框中輸入密碼
-        self.type("input[placeholder='Enter your Password']", password)
-        
-        # 點擊登入按鈕提交登入表單
+        # 根據是否為 admin 決定預設帳密
+        if is_admin and "admin_user_id" in config:
+            default_user = config["admin_user_id"]
+            default_password = config["admin_password"]
+        else:
+            default_user = config["user_id"]
+            default_password = config["password"]
+            
+        final_user_id = user_id or default_user
+        final_password = password or default_password
+
+        self.type(f"input[placeholder='{config['user_id_placeholder']}']", final_user_id)
+        self.type(f"input[placeholder='{config['password_placeholder']}']", final_password)
         self.click("button:contains('Login')")
-        # 驗證登入成功：檢查登出按鈕是否出現
-        self.assert_element("img.icon[src='https://mg-web.bhcbo.uat/e3c47/images/navbar/ic-Exit.svg']", timeout=10)
-    
-    def login_cbo_admin(self, user_id=TestConfig.CBO_ADMIN_USER_ID, password=TestConfig.CBO_ADMIN_PASSWORD):
+        self.assert_element(config["logout_selector"], timeout=10)
 
-        # 在使用者 ID 輸入框中輸入帳號
-        self.type("input[placeholder='Enter your User ID']", user_id)
-        
-        # 在密碼輸入框中輸入密碼
-        self.type("input[placeholder='Enter your Password']", password)
-        
-        # 點擊登入按鈕提交登入表單
-        self.click("button:contains('Login')")
-        # 驗證登入成功：檢查登出按鈕是否出現
-        self.assert_element("img.icon[src='https://mg-web.bhcbo.uat/e3c47/images/navbar/ic-Exit.svg']", timeout=10)
+    def logout(self, platform):
+        """通用的登出方法"""
+        config = self._get_platform_config(platform)
+        self.click(config["logout_selector"])
+        self.login_page_check(platform)
 
-    def logout_cbo(self):
-
-        # 點擊登出按鈕，結束當前會話
-        self.click("img.icon[src='https://mg-web.bhcbo.uat/e3c47/images/navbar/ic-Exit.svg']")
-        # 驗證已成功登出：檢查登入按鈕是否重新出現
+    def login_page_check(self, platform):
+        """通用的登入頁面檢查方法"""
+        config = self._get_platform_config(platform)
         self.assert_element("button:contains('Login')", timeout=10)
-        # 驗證頁面LOGO元素是否存在
-        self.assert_element("img.logo[src='https://mg-web.bhcbo.uat/e3c47/images/login/logo.png']", timeout=10)
-    
+        self.assert_element(config["logo_selector"], timeout=10)
+
     def type_wrong_user_id_cbo(self):
 
         # 在使用者 ID 輸入框中輸入帳號
@@ -195,7 +231,6 @@ class CustomBase(BaseCase):
         # el-overlay 是 Element UI 的遮罩層元素
         self.click("div.el-overlay")
 
-################################################################################################################
     def click_menu_accountmanagement_cbo(self):
         # 點擊左側菜單中的 "Account Management" 選項
         self.click("span:contains('Account Management')")
@@ -235,7 +270,9 @@ class CustomBase(BaseCase):
     def click_accountlist_platform_pin77_cbo(self):
 
         self.click("li.el-select-dropdown__item:contains('Pin77')")
+
 ################################################################################################################
+
     def click_menu_outletlist_cbo(self):
         # 點擊左側菜單中的 "Account Management" 選項
         self.click("span:contains('Outlet List')")
@@ -273,7 +310,7 @@ class CustomBase(BaseCase):
         self.assert_element("div.el-notification__content:contains('Password has been changed.')", timeout=10)
 
     def admin_recovery_password_dkyuan_all_cbo(self):
-        
+     
         target_menu_selector = "//tr[.//td[contains(., 'dkyuan_all')]]//div[contains(@class, 'el-dropdown')]"
         self.click(target_menu_selector)
 
@@ -292,72 +329,6 @@ class CustomBase(BaseCase):
         self.assert_element("h2.el-notification__title:contains('Password changed Successfully.')", timeout=10)
         self.assert_element("div.el-notification__content:contains('Password has been changed.')", timeout=10)
 ################################################################################################################
-
-    def login_page_check_kbb(self):
-        
-        self.assert_element("button:contains('Login')", timeout=10)
-        
-        # 驗證頁面副標題元素是否存在
-        # 這是頁面身份識別的重要元素，確保載入的是正確的頁面
-        self.assert_element("div.subtitle:contains('Centralized Back Office')", timeout=10)
-        
-        # 驗證副標題的文字內容是否完全正確
-        # 這是額外的文字內容驗證，確保頁面內容無誤
-        self.assert_text("Centralized Back Office", "div.subtitle")
-
-    def login_kbb(self, user_id=TestConfig.KBB_USER_ID, password=TestConfig.KBB_PASSWORD):
-        # 在使用者 ID 輸入框中輸入帳號
-        self.type("input[placeholder='Enter your User ID']", user_id)
-        
-        # 在密碼輸入框中輸入密碼
-        self.type("input[placeholder='Enter your Password']", password)
-        
-        # 點擊登入按鈕提交登入表單
-        self.click("button:contains('Login')")
-        
-        # 驗證登入成功：檢查登出按鈕是否出現
-        self.assert_element("button:contains('Logout')", timeout=10)
-
-    def logout_kbb(self):
-        # 點擊登出按鈕，結束當前的使用者會話
-        self.click("button:contains('Logout')")
-        
-        # 驗證已成功登出：檢查登入按鈕是否重新出現
-        self.assert_element("button:contains('Login')", timeout=10)
-        
-        # 驗證頁面副標題元素是否重新出現
-        self.assert_element("div.subtitle:contains('Centralized Back Office')", timeout=10)
-        
-        # 最終驗證：確認副標題文字內容正確
-        self.assert_text("Centralized Back Office", "div.subtitle")
-
-    def type_wrong_user_id_kbb(self):
-
-        # 在使用者 ID 輸入框中輸入錯誤的帳號
-        self.type("input[placeholder='Enter your User ID']", TestConfig.WRONG_USER_ID)
-        
-        # 在密碼輸入框中輸入正確的密碼
-        self.type("input[placeholder='Enter your Password']",  TestConfig.KBB_PASSWORD)
-        
-        # 點擊登入按鈕提交登入表單
-        self.click("button:contains('Login')")
-        
-        # 驗證錯誤提示訊息是否正確顯示
-        self.assert_element("div.error_message:contains('You have entered the wrong user ID or password. Please try again.')", timeout=10)
-
-    def type_wrong_password_kbb(self):
-
-        # 在使用者 ID 輸入框中輸入正確的帳號
-        self.type("input[placeholder='Enter your User ID']", TestConfig.KBB_USER_ID)
-        
-        # 在密碼輸入框中輸入錯誤的密碼
-        self.type("input[placeholder='Enter your Password']",  TestConfig.WRONG_PASSWORD)
-        
-        # 點擊登入按鈕提交登入表單
-        self.click("button:contains('Login')")
-        
-        # 驗證錯誤提示訊息是否正確顯示
-        self.assert_element("div.error_message:contains('You have entered the wrong user ID or password. Please try again.')", timeout=10)
 
     def click_resetpassword_kbb(self):
 

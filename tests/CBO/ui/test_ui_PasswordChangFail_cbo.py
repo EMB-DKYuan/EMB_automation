@@ -13,10 +13,10 @@ class TestUI密碼修改失敗CBO(CustomBase):
         login_url = TestConfig.build_ui_url("login", "CBO")
         self.open(login_url)
         
-        self.login_page_check_cbo()
+        self.login_page_check("CBO")
         # ===== 第二階段：執行使用者登入流程 =====
         
-        self.login_cbo()
+        self.login("CBO")
 
         # ===== 第三階段：進入密碼修改功能 =====
         
@@ -32,6 +32,6 @@ class TestUI密碼修改失敗CBO(CustomBase):
         
         # ===== 第六階段：登出並驗證返回登入頁面 =====
         
-        self.logout_cbo()
+        self.logout("CBO")
 
         print(f"使用的 URL: {login_url}")

@@ -9,17 +9,17 @@ class TestUIadmin改密碼後user重置密碼CBO(CustomBase):
         # =====設定瀏覽器視窗大小 =====
         self.specific_window_size()
         
-        # =====使用 KBB UI 網域 =====
+        # =====使用 CBO UI 網域 =====
         login_url = TestConfig.build_ui_url("login", "CBO")
        
         # =====開啟登入頁面並驗證頁面載入 =====
         self.open(login_url)
         
-        self.login_page_check_cbo()
+        self.login_page_check("CBO")
 
         # =====輸入使用者憑證並執行登入 =====
         
-        self.login_cbo_admin()
+        self.login("CBO", is_admin=True)
 
         # =====admine改密碼 =====
 
@@ -35,6 +35,6 @@ class TestUIadmin改密碼後user重置密碼CBO(CustomBase):
         
         # =====執行登出操作 =====
         
-        self.logout_cbo()
+        self.logout("CBO")
 
         print(f"使用的 URL: {login_url}")
