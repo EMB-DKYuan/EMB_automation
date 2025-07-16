@@ -1,7 +1,7 @@
 # 測試配置
 test_paths:
   unit_tests:
-    - tests/CBO/ui/test_ui_AllPageCheck_cbo.py
+    - tests/CC/company/ui/test_ui_Login&out_cc.py
 
   ui_tests:
     - tests/CBO_KBB/ui/test_ui_密碼修改失敗_kbb.py

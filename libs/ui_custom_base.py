@@ -65,6 +65,7 @@ class CustomBase(BaseCase):
         self.run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     def save_screenshot_with_full_path(self, task_name=None):
+         
         # 取得專案根目錄
         project_root = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 
@@ -93,6 +94,8 @@ class CustomBase(BaseCase):
             screenshot_name = f"{file_time_str}_{task_name}.png"
         else:
             screenshot_name = f"{file_time_str}_screenshot.png"
+
+        self.sleep(0.5)
 
         # 組合完整路徑並存檔
         full_path = os.path.join(full_folder_path, screenshot_name)
