@@ -9,7 +9,7 @@ class TestUI登入登出CBO(CustomBase):
         # =====設定瀏覽器視窗大小 =====
         self.specific_window_size()
         
-        # 使用 KBB UI 網域
+        # 使用 CBO UI 網域
         login_url = TestConfig.build_ui_url("login", "CBO")
         # ===== 第一階段：開啟登入頁面並驗證頁面載入 =====
         self.open(login_url)
