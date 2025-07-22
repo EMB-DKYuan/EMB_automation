@@ -17,6 +17,7 @@ class TestConfig:
         """
         var_name = f"{base_var_name}_{cls.ENVIRONMENT}"
         value = os.getenv(var_name)
+        print(f"[Config] Reading env var: '{var_name}' -> '{value}'") # 可選：打開此行來輔助除錯
         if value is None:
             raise ValueError(f"環境變數 '{var_name}' 未在 .env 檔案中設定！")
         return value

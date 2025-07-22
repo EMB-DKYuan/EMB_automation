@@ -1,7 +1,7 @@
 # 測試配置
 test_paths:
   unit_tests:
-    - tests/CC/company/ui/test_ui_Login&out_cc.py
+    - tests/CC/company/ui/test_ui_Login&out_company.py
 
   ui_tests:
     - tests/CBO_KBB/ui/test_ui_密碼修改失敗_kbb.py
@@ -34,6 +34,10 @@ test_paths:
     - tests/CBO/ui/test_ui_WrongPasswordLogin_cbo.py
     - tests/CBO/ui/test_ui_AdminResetrUserPassword_cbo.py
     - tests/CBO/ui/test_ui_AllPageCheck_cbo.py
+
+  cc_tests:
+    - tests/CC/company/ui/test_ui_Login&out_company.py
+    - tests/CC/agent/ui/test_ui_Login&out_agent.py
 
 # 執行模式
 mode: all, unit, ui, api, kbb, cbo # all, ui, api, smoke, custom

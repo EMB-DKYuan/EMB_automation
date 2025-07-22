@@ -809,7 +809,6 @@ platform_configs = {
         "password": TestConfig.NEWPLATFORM_PASSWORD,
         "user_id_placeholder": "Enter your User ID",
         "password_placeholder": "Enter your Password",
-        "logo_selector": "img.logo",
         "logout_selector": "button:contains('Logout')",
     },
     # ... 其他現有平台

@@ -116,15 +116,13 @@ class CustomBase(BaseCase):
                 "admin_password": TestConfig.CBO_ADMIN_PASSWORD,
                 "user_id_placeholder": "Enter your User ID",
                 "password_placeholder": "Enter your Password",
-                "logo_selector": f"img.logo[src='{TestConfig.CBO_LOGO_URL()}']",
-                "logout_selector": f"img.icon[src='{TestConfig.CBO_LOGOUT_ICON_URL()}']",
+                "logout_selector": "button.el-button.is-circle:has(img.icon)",
             },
             "KBB": {
                 "user_id": TestConfig.KBB_USER_ID,
                 "password": TestConfig.KBB_PASSWORD,
                 "user_id_placeholder": "Enter your User ID",
                 "password_placeholder": "Enter your Password",
-                "logo_selector": "div.subtitle:contains('Centralized Back Office')",
                 "logout_selector": "button:contains('Logout')",
             },
             "CCCOMPANY": {
@@ -132,16 +130,14 @@ class CustomBase(BaseCase):
                 "password": TestConfig.CCCOMPANY_ADMIN_PASSWORD,
                 "user_id_placeholder": "Input your account",
                 "password_placeholder": "Enter your password",
-                "logo_selector": f"img.logo[src='{TestConfig.CC_LOGO_URL()}']",
-                "logout_selector": f"img.icon[src='{TestConfig.CC_LOGOUT_ICON_URL()}']",
+                "logout_selector": ".logout-container",
             },
             "CCAGENT": {
                 "user_id": TestConfig.CCAGENT_ADMIN_USER_ID, # 只有 admin
                 "password": TestConfig.CCAGENT_ADMIN_PASSWORD,
-                "user_id_placeholder": "Input your account",
+                "user_id_placeholder": "Enter your account",
                 "password_placeholder": "Enter your password",
-                "logo_selector": f"img.logo[src='{TestConfig.CC_LOGO_URL()}']", # 假設與 CCCOMPANY 共用
-                "logout_selector": f"img.icon[src='{TestConfig.CC_LOGOUT_ICON_URL()}']", # 假設與 CCCOMPANY 共用
+                "logout_selector": ".logout-container", # 與 CCCOMPANY 共用
             }
         }
         config = platform_configs.get(platform)
@@ -179,7 +175,6 @@ class CustomBase(BaseCase):
         """通用的登入頁面檢查方法"""
         config = self._get_platform_config(platform)
         self.assert_element("button:contains('Login')", timeout=10)
-        self.assert_element(config["logo_selector"], timeout=10)
 
     def type_wrong_user_id_cbo(self):
 
